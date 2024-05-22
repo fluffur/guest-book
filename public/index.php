@@ -1,7 +1,6 @@
 <?php
 session_start();
 require_once '../bootstrap.php';
-require_once '../db.php';
 
 $pdo = pdo();
 
