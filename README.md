@@ -40,7 +40,7 @@ MYSQL_DATABASE=guestbook
    - ```shell
      mysql -u username -p 
       
-     Enter password: secret
+     Enter password: user_password
      ```
    - Or use Jetbrains Datasource in PHPStorm.
 
