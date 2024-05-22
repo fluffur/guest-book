@@ -1,6 +1,6 @@
 # Guest Book Project
 
-This project is a simple web guest book in PHP
+This project is a simple web guest book in PHP.
 
 ## Project Structure
 
@@ -40,7 +40,7 @@ MYSQL_DATABASE=guestbook
    - ```shell
      mysql -u username -p 
       
-     Enter password: secret
+     Enter password: user_password
      ```
    - Or use Jetbrains Datasource in PHPStorm.
 
