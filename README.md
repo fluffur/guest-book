@@ -1,6 +1,6 @@
 # Guest Book Project
 
-This project is a simple web guest book in PHP
+This project is a simple web guest book in PHP.
 
 ## Project Structure
 
