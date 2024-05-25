@@ -4,9 +4,8 @@ require_once '../bootstrap.php';
 
 $pdo = pdo();
 
-$stmt = $pdo->query('SELECT users.id as user_id, username, um.id AS message_id, user_id, message FROM users JOIN guestbook.user_messages um on users.id = um.user_id');
+$stmt = $pdo->query('SELECT user_id, um.message, users.username FROM users JOIN public.user_messages um on users.id = um.user_id');
 $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 
 
 ?>

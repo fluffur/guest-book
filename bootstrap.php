@@ -12,11 +12,12 @@ function pdo(): PDO
     if (isset($pdo)) {
         return $pdo;
     }
+    $dsn = "{$_ENV['DB_DRIVER']}:host={$_ENV['DB_HOST']};dbname={$_ENV['DB_DATABASE']}";
 
     $pdo = new PDO(
-        "mysql:host={$_ENV['HOST']};dbname={$_ENV['MYSQL_DATABASE']}",
-        $_ENV['MYSQL_USER'],
-        $_ENV['MYSQL_PASSWORD']
+        $dsn,
+        $_ENV['DB_USER'],
+        $_ENV['DB_PASSWORD']
     );
 
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
