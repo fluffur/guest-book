@@ -1,48 +1,30 @@
 <?php
-session_start();
-require_once '../bootstrap.php';
 
-$pdo = pdo();
-
-$stmt = $pdo->query('SELECT user_id, um.message, users.username FROM users JOIN public.user_messages um on users.id = um.user_id');
-$messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+declare(strict_types=1);
 
 
-?>
+use App\App;
+use App\Config;
+use App\Container;
+use App\DTO\Request;
+use App\Enums\RequestMethod;
+use App\Routing\ControllerResolver;
+use App\Routing\Router;
 
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../configs/path_constants.php';
 
-<!-- TODO: make better styling -->
+$dotenv = Dotenv\Dotenv::createImmutable(ROOT_PATH);
+$dotenv->load();
 
+$container = new Container();
+$router = new Router($container, new ControllerResolver());
 
-<?php if (isset($_SESSION['user_id'])): ?>
+$request = new Request(RequestMethod::from($_SERVER['REQUEST_METHOD']), $_SERVER['REQUEST_URI']);
 
-    <p>Welcome, <?= $_SESSION['username'] ?></p>
-    <p><a href="logout.php">Logout</a></p>
-
-    <form method="post" action="post_message.php">
-        <label for="message">Message: </label>
-        <br>
-        <textarea style="resize: none"
-                name="message"
-                id="message"
-                cols="30"
-                rows="10"
-                maxlength="120"
-                placeholder="Write your message here"></textarea>
-        <input type="submit" value="Enter message">
-    </form>
-
-<?php else: ?>
-
-    <p><a href="login.php">Login</a></p>
-
-
-<?php endif; ?>
-
-<?php foreach ($messages as $message): ?>
-
-    <p>Message from <?= $message['username'] . '@' . $message['user_id'] ?></p>
-    <p>Content: <?= $message['message'] ?></p>
-    <hr>
-
-<?php endforeach; ?>
+(new App(
+    $container,
+    $router,
+    $request,
+    new Config($_ENV)
+))->run();
