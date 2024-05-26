@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -49,6 +48,7 @@
     <?php foreach ($messages as $message): ?>
         <p>Message from <a href="<?= $message['user_id'] ?>"> <?= $message['username'] ?></a></p>
         <p><?= $message['message'] ?></p>
+        <p><a id="deleteMessage" href="/messages/delete/<?= $message['id'] ?>">Delete</a></p>
         <hr>
 
     <?php endforeach; ?>
@@ -56,7 +56,14 @@
 
 </main>
 
+<script>
 
+    const deleteMessage = document.getElementById("deleteMessage");
+    deleteMessage.onclick = async function () {
+        await fetch(deleteMessage.getAttribute("href"), {method: "DELETE"})
+    }
+
+</script>
 
 </body>
 </html>

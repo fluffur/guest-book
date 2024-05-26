@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Attributes\Controller;
+use App\Attributes\Delete;
 use App\Attributes\Get;
 use App\Attributes\Post;
 use App\Services\MessageService;
@@ -36,6 +37,17 @@ class MessagesController
         session_start();
 
         $messageId = $this->messageService->createMessage();
+
+        header('Location: /messages');
+
+    }
+
+    #[Delete('/messages/delete')]
+    public function delete(): void
+    {
+        session_start();
+
+        $this->messageService->delete();
 
         header('Location: /messages');
 

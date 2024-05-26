@@ -6,18 +6,26 @@ namespace App\Routing;
 
 use App\Attributes\Route;
 use App\Container;
+use App\DTO\RequestBody;
 use App\Enums\RequestMethod;
 use App\Exceptions\RouteNotFoundException;
+use http\Exception\RuntimeException;
 use ReflectionClass;
+use ReflectionIntersectionType;
+use ReflectionMethod;
+use ReflectionNamedType;
+use ReflectionParameter;
+use ReflectionUnionType;
 
 class Router
 {
     private array $routes = [];
 
     public function __construct(
-        private Container $container,
+        private Container          $container,
         private ControllerResolver $controllerResolver
-    ) {
+    )
+    {
     }
 
     public function registerRoutesFromControllersInNamespace(string $namespace): void
@@ -69,10 +77,10 @@ class Router
 
     public function resolve(string $requestUri, RequestMethod $requestMethod)
     {
-        $route  = explode('?', $requestUri)[0];
+        $route = explode('?', $requestUri)[0];
         $action = $this->routes[$requestMethod->value][$route] ?? null;
 
-        if ( ! $action) {
+        if (!$action) {
             throw new RouteNotFoundException();
         }
 
@@ -83,13 +91,16 @@ class Router
         [$class, $method] = $action;
 
         if (class_exists($class)) {
-            $class = $this->container->get($class);
+            $object = $this->container->get($class);
 
-            if (method_exists($class, $method)) {
-                return $class->$method();
+            if (method_exists($object, $method)) {
+
+                return $object->$method();
+
             }
         }
 
         throw new RouteNotFoundException();
     }
+
 }
