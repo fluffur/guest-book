@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Attributes\Controller;
 use App\Attributes\Get;
+use App\Attributes\Post;
 use App\Services\MessageService;
 use App\View;
 
@@ -17,15 +18,26 @@ class MessagesController
     #[Get('/messages')]
     public function index(): View|string
     {
+        session_start();
+
         $messages = $this->messageService->findAllMessagesWithAuthors();
 
-        $userId = $_SESSION['user_id'] ?? null;
-        $username = $_SESSION['username'] ?? 'guest';
-
+        $user = $_SESSION['user'] ?? null;
         return View::make('messages/all', [
             'messages' => $messages,
-            'user_id' => $userId,
-            'username' => $username
+            'user' => $user
         ]);
+    }
+
+    #[Post('/messages/new')]
+    public function create(): void
+    {
+
+        session_start();
+
+        $messageId = $this->messageService->createMessage();
+
+        header('Location: /messages');
+
     }
 }

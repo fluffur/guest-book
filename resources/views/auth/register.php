@@ -22,7 +22,7 @@
 
     <h2>Register</h2>
 
-    <form method="post" action="register.php">
+    <form method="post" action="/register">
         <label for="username">Username: </label>
         <input id="username" name="username" type="text" maxlength="255">
         <br>

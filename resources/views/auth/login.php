@@ -22,7 +22,7 @@
 <main>
 
     <h2>Log in</h2>
-    <form method="post" action="login.php">
+    <form method="post" action="/login">
         <label for="username">Username: </label>
         <input id="username" name="username" type="text" maxlength="255">
         <br>

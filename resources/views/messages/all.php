@@ -15,15 +15,15 @@
         <ul>
             <li><a href="/login">Login</a></li>
             <li><a href="/register">Register</a></li>
-            <li><a href="/messages">Show messages</a></li>
+            <li><a href="/messages">Update messages</a></li>
         </ul>
     </nav>
 </header>
 <main>
 
-    <?php if (isset($user_id)): ?>
+    <?php if (isset($user['id'])): ?>
 
-        <p>Welcome, <?= $user_id ?></p>
+        <p>Welcome, <?= $user['username'] ?></p>
         <p><a href="/logout">Logout</a></p>
 
         <form method="post" action="/messages/new">
@@ -47,8 +47,8 @@
     <?php endif; ?>
 
     <?php foreach ($messages as $message): ?>
-        <p>Message from <?= $message['username'] . '@' . $message['user_id'] ?></p>
-        <p>Content: <?= $message['message'] ?></p>
+        <p>Message from <a href="<?= $message['user_id'] ?>"> <?= $message['username'] ?></a></p>
+        <p><?= $message['message'] ?></p>
         <hr>
 
     <?php endforeach; ?>
