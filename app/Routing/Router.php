@@ -6,16 +6,10 @@ namespace App\Routing;
 
 use App\Attributes\Route;
 use App\Container;
-use App\DTO\RequestBody;
+use App\DTO\Request;
 use App\Enums\RequestMethod;
 use App\Exceptions\RouteNotFoundException;
-use http\Exception\RuntimeException;
 use ReflectionClass;
-use ReflectionIntersectionType;
-use ReflectionMethod;
-use ReflectionNamedType;
-use ReflectionParameter;
-use ReflectionUnionType;
 
 class Router
 {
@@ -47,27 +41,28 @@ class Router
                 foreach ($attributes as $attribute) {
                     $route = $attribute->newInstance();
 
-                    $this->register($route->method->value, $route->routePath, [$controller, $method->getName()]);
+                    $this->register(new Request($route->method, $route->routePath), [$controller, $method->getName()]);
                 }
             }
         }
     }
 
-    public function register(string $requestMethod, string $route, callable|array $action): self
+
+    public function register(Request $request, callable|array $action): self
     {
-        $this->routes[$requestMethod][$route] = $action;
+        $this->routes[$request->method->value][$request->uri] = $action;
 
         return $this;
     }
 
     public function get(string $route, callable|array $action): self
     {
-        return $this->register('get', $route, $action);
+        return $this->register(new Request(RequestMethod::Get, $route), $action);
     }
 
     public function post(string $route, callable|array $action): self
     {
-        return $this->register('post', $route, $action);
+        return $this->register(new Request(RequestMethod::Post, $route), $action);
     }
 
     public function routes(): array
@@ -75,17 +70,24 @@ class Router
         return $this->routes;
     }
 
-    public function resolve(string $requestUri, RequestMethod $requestMethod)
+    public function resolve(Request $request)
     {
-        $route = explode('?', $requestUri)[0];
-        $action = $this->routes[$requestMethod->value][$route] ?? null;
+        $uriSplit = explode('?', $request->uri);
+        $route = $uriSplit[0];
+
+        if (isset($uriSplit[1])) {
+            $rawQueryString = $uriSplit[1];
+            parse_str($rawQueryString, $queryString);
+            $request->queryString = $queryString;
+        }
+        $action = $this->routes[$request->method->value][$route] ?? null;
 
         if (!$action) {
             throw new RouteNotFoundException();
         }
 
         if (is_callable($action)) {
-            return call_user_func($action);
+            return $action($request);
         }
 
         [$class, $method] = $action;
@@ -95,8 +97,7 @@ class Router
 
             if (method_exists($object, $method)) {
 
-                return $object->$method();
-
+                return $object->$method($request);
             }
         }
 

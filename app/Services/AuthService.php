@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DTO\Request;
 use App\Models\Message;
 use App\Models\User;
 use RuntimeException;
@@ -16,9 +17,9 @@ class AuthService
     {
     }
 
-    public function processLogin(): void
+    public function processLogin(string $username, string $password): void
     {
-        [$username, $password] = $this->parseLoginFormRequest();
+        $this->validateCredentials($username, $password);
 
         $user = $this->userModel->findByUsername($username);
 
@@ -29,9 +30,9 @@ class AuthService
         $_SESSION['user'] = $user;
     }
 
-    public function processRegister(): void
+    public function processRegister(string $username, string $password): void
     {
-        [$username, $password] = $this->parseLoginFormRequest();
+        $this->validateCredentials($username, $password);
 
         $user = $this->userModel->findByUsername($username);
 
@@ -45,17 +46,11 @@ class AuthService
 
     }
 
-    private function parseLoginFormRequest(): array
+    private function validateCredentials(string $username, string $password): void
     {
-        $username = $_POST['username'] ?? false;
-        $password = $_POST['password'] ?? false;
-
         if (!$username || !$password) {
             throw new RuntimeException('Username or password is required');
         }
-
-        return [$username, $password];
-
     }
 
 

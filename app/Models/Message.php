@@ -23,4 +23,11 @@ class Message extends Model
         $stmt->execute(['userId' => $userId, 'message' => $message]);
         return $this->db->lastInsertId();
     }
+
+    public function findById(int $messageId): array
+    {
+        $stmt = $this->db->prepare('SELECT * FROM user_messages WHERE id = :message_id');
+        $stmt->execute(['message_id' => $messageId]);
+        return $stmt->fetch();
+    }
 }

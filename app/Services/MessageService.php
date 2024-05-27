@@ -15,11 +15,20 @@ class MessageService
         return $this->messageModel->findAllWithUsers();
     }
 
-    public function createMessage(): int
+    public function createMessage(string $message): int
     {
         $userId = $_SESSION['user']['id'] or die('Session expired');
-        $message = $_POST['message'] ?? '';
 
         return $this->messageModel->create($userId, $message);
+    }
+
+    public function delete()
+    {
+    }
+
+    public function findById(int $messageId)
+    {
+        return $this->messageModel->findById($messageId);
+
     }
 }

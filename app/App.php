@@ -15,7 +15,7 @@ class App
         protected Container $container,
         protected Router    $router,
         protected Request   $request,
-        protected Config    $config
+        protected Config    $config,
     )
     {
         $db = new DB($this->config->db ?? []);
@@ -26,7 +26,7 @@ class App
     public function run(): void
     {
         try {
-            echo $this->router->resolve($this->request->uri, $this->request->method);
+            echo $this->router->resolve($this->request);
         } catch (RouteNotFoundException) {
             http_response_code(404);
 

@@ -8,7 +8,9 @@ class Request
 {
     public function __construct(
         public readonly RequestMethod $method,
-        public readonly string        $uri
+        public readonly string        $uri,
+        public array                  $body = [],
+        public array                  $queryString = []
     )
     {
     }

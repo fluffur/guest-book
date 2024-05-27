@@ -6,8 +6,6 @@ declare(strict_types=1);
 use App\App;
 use App\Config;
 use App\Container;
-use App\DTO\Request;
-use App\Enums\RequestMethod;
 use App\Routing\ControllerResolver;
 use App\Routing\Router;
 
@@ -20,7 +18,7 @@ $dotenv->load();
 $container = new Container();
 $router = new Router($container, new ControllerResolver());
 
-$request = new Request(RequestMethod::from($_SERVER['REQUEST_METHOD']), $_SERVER['REQUEST_URI']);
+$request = require_once './../configs/parse_request.php';
 
 (new App(
     $container,

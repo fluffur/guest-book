@@ -6,6 +6,7 @@ use App\Attributes\Controller;
 use App\Attributes\Delete;
 use App\Attributes\Get;
 use App\Attributes\Post;
+use App\DTO\Request;
 use App\Services\MessageService;
 use App\View;
 
@@ -17,7 +18,7 @@ class MessagesController
     }
 
     #[Get('/messages')]
-    public function index(): View|string
+    public function index(Request $request): View|string
     {
         session_start();
 
@@ -31,25 +32,17 @@ class MessagesController
     }
 
     #[Post('/messages/new')]
-    public function create(): void
+    public function create(Request $request): void
     {
 
         session_start();
 
-        $messageId = $this->messageService->createMessage();
+
+        $messageId = $this->messageService->createMessage($request->body['message']);
 
         header('Location: /messages');
 
     }
 
-    #[Delete('/messages/delete')]
-    public function delete(): void
-    {
-        session_start();
 
-        $this->messageService->delete();
-
-        header('Location: /messages');
-
-    }
 }

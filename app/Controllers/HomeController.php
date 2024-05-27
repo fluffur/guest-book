@@ -4,17 +4,16 @@ namespace App\Controllers;
 
 use App\Attributes\Controller;
 use App\Attributes\Get;
-use App\DB;
+use App\DTO\Request;
 use App\View;
 
 #[Controller]
 class HomeController
 {
     #[Get('/')]
-    public function index(): View|string
+    public function index(Request $request): View|string
     {
         session_start();
-
         return View::make('home');
 
     }
