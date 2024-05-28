@@ -5,8 +5,10 @@ namespace App\Controllers;
 use App\Attributes\Controller;
 use App\Attributes\Delete;
 use App\Attributes\Get;
+use App\Attributes\Middleware;
 use App\Attributes\Post;
 use App\DTO\Request;
+use App\Middlewares\SessionMiddleware;
 use App\Services\MessageService;
 use App\View;
 
@@ -18,6 +20,7 @@ class MessagesController
     }
 
     #[Get('/messages')]
+    #[Middleware(SessionMiddleware::class)]
     public function index(Request $request): View|string
     {
         $messages = $this->messageService->findAllMessagesWithAuthors();
@@ -30,6 +33,7 @@ class MessagesController
     }
 
     #[Post('/messages/new')]
+    #[Middleware(SessionMiddleware::class)]
     public function create(Request $request): void
     {
         $messageId = $this->messageService->createMessage($request->body['message']);

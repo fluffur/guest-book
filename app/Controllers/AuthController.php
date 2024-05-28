@@ -4,8 +4,10 @@ namespace App\Controllers;
 
 use App\Attributes\Controller;
 use App\Attributes\Get;
+use App\Attributes\Middleware;
 use App\Attributes\Post;
 use App\DTO\Request;
+use App\Middlewares\SessionMiddleware;
 use App\Services\AuthService;
 use App\View;
 
@@ -31,6 +33,7 @@ class AuthController
 
 
     #[Post('/login')]
+    #[Middleware(SessionMiddleware::class)]
     public function processLogin(Request $request): void
     {
         $username = $request->body['username'] ?? null;
@@ -43,6 +46,7 @@ class AuthController
     }
 
     #[Post('/register')]
+    #[Middleware(SessionMiddleware::class)]
     public function processRegister(Request $request): void
     {
         $username = $request->body['username'] ?? null;
@@ -55,6 +59,7 @@ class AuthController
     }
 
     #[Get('/logout')]
+    #[Middleware(SessionMiddleware::class)]
     public function logout(Request $request): void
     {
         session_destroy();

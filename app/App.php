@@ -18,8 +18,10 @@ class App
         protected Config    $config,
     )
     {
-        $db = new DB($this->config->db ?? []);
         $this->router->registerRoutesFromControllersInNamespace('\\App\\Controllers\\');
+        $this->router->registerMiddlewaresFromControllersInNamespace('\\App\\Controllers\\');
+
+        $db = new DB($this->config->db ?? []);
         $this->container->set(DB::class, fn($container) => $db);
     }
 

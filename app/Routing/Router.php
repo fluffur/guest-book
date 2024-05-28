@@ -82,6 +82,34 @@ class Router
     }
 
 
+    public function registerMiddlewaresFromControllerAttributes(array $controllers)
+    {
+        foreach ($controllers as $controller) {
+            $reflectionController = new ReflectionClass($controller);
+
+            foreach ($reflectionController->getMethods() as $method) {
+                $attributes = $method->getAttributes(Middleware::class, \ReflectionAttribute::IS_INSTANCEOF);
+                $routes = $method->getAttributes(Route::class, \ReflectionAttribute::IS_INSTANCEOF);
+
+                foreach ($attributes as $attribute) {
+                    $middleware = $attribute->newInstance();
+                    foreach ($routes as $route) {
+                        $routeInstance = $route->newInstance();
+
+                        $this->middleware($middleware, $routeInstance->method, $routeInstance->uri);
+                    }
+                }
+            }
+        }
+    }
+
+    public function registerMiddlewaresFromControllersInNamespace(string $namespace)
+    {
+        $this->registerMiddlewaresFromControllerAttributes(
+            $this->container->get(ControllerResolver::class)->getControllersFromNamespace($namespace)
+        );
+    }
+
     public function resolve(Request $request)
     {
         $uriSplit = explode('?', $request->uri);
