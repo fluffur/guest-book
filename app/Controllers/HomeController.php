@@ -13,7 +13,6 @@ class HomeController
     #[Get('/')]
     public function index(Request $request): View|string
     {
-        session_start();
         return View::make('home');
 
     }

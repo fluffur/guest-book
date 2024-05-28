@@ -13,15 +13,13 @@ use App\View;
 #[Controller]
 class MessagesController
 {
-    public function __construct(private MessageService $messageService)
+    public function __construct(protected MessageService $messageService)
     {
     }
 
     #[Get('/messages')]
     public function index(Request $request): View|string
     {
-        session_start();
-
         $messages = $this->messageService->findAllMessagesWithAuthors();
 
         $user = $_SESSION['user'] ?? null;
@@ -34,10 +32,6 @@ class MessagesController
     #[Post('/messages/new')]
     public function create(Request $request): void
     {
-
-        session_start();
-
-
         $messageId = $this->messageService->createMessage($request->body['message']);
 
         header('Location: /messages');

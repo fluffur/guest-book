@@ -6,18 +6,20 @@ namespace App\Routing;
 
 use App\Attributes\Route;
 use App\Container;
+use App\Contracts\Middleware;
 use App\DTO\Request;
 use App\Enums\RequestMethod;
 use App\Exceptions\RouteNotFoundException;
+use App\Middlewares\MiddlewarePipeline;
 use ReflectionClass;
 
 class Router
 {
     private array $routes = [];
+    private array $middlewares = [];
 
     public function __construct(
-        private Container          $container,
-        private ControllerResolver $controllerResolver
+        protected Container $container,
     )
     {
     }
@@ -25,7 +27,7 @@ class Router
     public function registerRoutesFromControllersInNamespace(string $namespace): void
     {
         $this->registerRoutesFromControllerAttributes(
-            $this->controllerResolver->getControllersFromNamespace($namespace)
+            $this->container->get(ControllerResolver::class)->getControllersFromNamespace($namespace)
         );
     }
 
@@ -70,6 +72,16 @@ class Router
         return $this->routes;
     }
 
+
+    public function middleware(Middleware $middleware, RequestMethod $method, string...$routes): self
+    {
+        foreach ($routes as $route) {
+            $this->middlewares[$method->value][$route][] = $middleware;
+        }
+        return $this;
+    }
+
+
     public function resolve(Request $request)
     {
         $uriSplit = explode('?', $request->uri);
@@ -86,22 +98,35 @@ class Router
             throw new RouteNotFoundException();
         }
 
+
         if (is_callable($action)) {
             return $action($request);
         }
 
-        [$class, $method] = $action;
-
-        if (class_exists($class)) {
-            $object = $this->container->get($class);
-
-            if (method_exists($object, $method)) {
-
-                return $object->$method($request);
-            }
+        $middlewares = $this->middlewares[$request->method->value][$route] ?? [];
+        $middlewarePipeline = $this->container->get(MiddlewarePipeline::class);
+        foreach ($middlewares as $middleware) {
+            $middlewarePipeline->add($middleware);
         }
 
-        throw new RouteNotFoundException();
+        $handler = function ($request) use ($action) {
+
+            [$class, $method] = $action;
+
+            if (class_exists($class)) {
+                $object = $this->container->get($class);
+
+                if (method_exists($object, $method)) {
+
+                    return $object->$method($request);
+                }
+            }
+
+            throw new RouteNotFoundException();
+        };
+
+        return $middlewarePipeline->handle($request, $handler);
+
     }
 
 }

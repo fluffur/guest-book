@@ -20,16 +20,12 @@ class AuthController
     #[Get('/login')]
     public function login(Request $request): View
     {
-        session_start();
-
         return View::make('auth/login');
     }
 
     #[Get('/register')]
     public function register(Request $request): View
     {
-        session_start();
-
         return View::make('auth/register');
     }
 
@@ -37,9 +33,6 @@ class AuthController
     #[Post('/login')]
     public function processLogin(Request $request): void
     {
-        session_start();
-
-
         $username = $request->body['username'] ?? null;
         $password = $request->body['password'] ?? null;
 
@@ -52,8 +45,6 @@ class AuthController
     #[Post('/register')]
     public function processRegister(Request $request): void
     {
-        session_start();
-
         $username = $request->body['username'] ?? null;
         $password = $request->body['password'] ?? null;
 
@@ -66,8 +57,6 @@ class AuthController
     #[Get('/logout')]
     public function logout(Request $request): void
     {
-        session_start();
-
         session_destroy();
 
         header('Location: /');
