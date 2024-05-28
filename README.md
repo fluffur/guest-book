@@ -24,28 +24,20 @@ You can find Docker Desktop installation instructions [here](https://docs.docker
 
 To run the project, follow these steps:
 
-1. Сreate a .env file in the root directory with the following content:
+1. Сreate a `.env` file in the root directory with the following content:
 
 ```env
-MYSQL_ROOT_PASSWORD=root_password
-MYSQL_USER=username
-MYSQL_PASSWORD=user_password
-MYSQL_DATABASE=guestbook
+DB_ROOT_PASSWORD=root
+DB_USER=username
+DB_PASSWORD=secret
+DB_DATABASE=guestbook
+DB_HOST=db
+DB_DRIVER=pgsql
 ```
 
-2. Connect to `guestbook` database:
-    - ```shell
-      docker exec -it docker-db-1 bash
-       ```
-   - ```shell
-     mysql -u username -p 
-      
-     Enter password: user_password
-     ```
-   - Or use Jetbrains Datasource in PHPStorm.
 
 
-3. Create tables by using this SQL query:
+2. Create tables by using this SQL query:
 ```mysql
 CREATE TABLE users
 (
@@ -63,13 +55,13 @@ CREATE TABLE user_messages
 );
 ```
 
-4. Navigate to the `docker` directory:
+3. Navigate to the `docker` directory:
 
 ```shell
 cd docker
 ```
 
-5. Start the containers in detached mode:
+4. Start the containers in detached mode:
 
 ```shell
 docker compose up -d
@@ -87,13 +79,12 @@ docker compose down
 
 ### Nginx
 
-The MySQL database configuration is set in the `.env` file . Here you can specify the database name, user, and password.
-The Nginx configuration file is located at `docker/nginx/nginx.conf`. It's already preconfigured, so you do not have to
+The **Nginx** configuration file is located at `docker/nginx/nginx.conf`. It's already preconfigured, so you do not have to
 worry about it.
 
-### MySQL
+### PostgresSQL
 
-The MySQL database configuration is set in the `docker-compose.yml` file and environment variables are loaded from
+The **PostgresSQL** database configuration is set in the `docker-compose.yml` file and environment variables are loaded from
 the `.env` file you created.
 
 ### PHP
