@@ -19,9 +19,6 @@ $dotenv->load();
 $container = new Container();
 $router = new Router($container);
 
-$router->middleware($container->get(SessionMiddleware::class), RequestMethod::Get, '/', '/messages', '/login', '/register', '/logout');
-$router->middleware($container->get(SessionMiddleware::class), RequestMethod::Post, '/messages/new', '/login', '/register', '/logout');
-
 $request = require_once './../configs/parse_request.php';
 
 (new App(

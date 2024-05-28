@@ -2,7 +2,7 @@
 
 namespace App\Middlewares;
 
-use App\Contracts\Middleware;
+use App\Contracts\MiddlewareInterface;
 use App\DTO\Request;
 
 class MiddlewarePipeline
@@ -14,7 +14,7 @@ class MiddlewarePipeline
     {
         return $this->middlewares;
     }
-    public function add(Middleware $middleware): self
+    public function add(MiddlewareInterface $middleware): self
     {
         $this->middlewares[] = $middleware;
         return $this;

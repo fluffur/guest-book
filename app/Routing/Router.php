@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Routing;
 
+use App\Attributes\Middleware;
 use App\Attributes\Route;
 use App\Container;
-use App\Contracts\Middleware;
+use App\Contracts\MiddlewareInterface;
 use App\DTO\Request;
 use App\Enums\RequestMethod;
 use App\Exceptions\RouteNotFoundException;
@@ -36,10 +37,8 @@ class Router
     {
         foreach ($controllers as $controller) {
             $reflectionController = new ReflectionClass($controller);
-
             foreach ($reflectionController->getMethods() as $method) {
                 $attributes = $method->getAttributes(Route::class, \ReflectionAttribute::IS_INSTANCEOF);
-
                 foreach ($attributes as $attribute) {
                     $route = $attribute->newInstance();
 
@@ -73,7 +72,7 @@ class Router
     }
 
 
-    public function middleware(Middleware $middleware, RequestMethod $method, string...$routes): self
+    public function middleware(MiddlewareInterface $middleware, RequestMethod $method, string...$routes): self
     {
         foreach ($routes as $route) {
             $this->middlewares[$method->value][$route][] = $middleware;
@@ -82,7 +81,7 @@ class Router
     }
 
 
-    public function registerMiddlewaresFromControllerAttributes(array $controllers)
+    public function registerMiddlewaresFromControllerAttributes(array $controllers): void
     {
         foreach ($controllers as $controller) {
             $reflectionController = new ReflectionClass($controller);
@@ -95,8 +94,8 @@ class Router
                     $middleware = $attribute->newInstance();
                     foreach ($routes as $route) {
                         $routeInstance = $route->newInstance();
-
-                        $this->middleware($middleware, $routeInstance->method, $routeInstance->uri);
+                        $middlewareImpl = $this->container->get($middleware->middleware);
+                        $this->middleware($middlewareImpl, $routeInstance->method, $routeInstance->routePath);
                     }
                 }
             }
