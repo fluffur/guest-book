@@ -6,8 +6,6 @@ declare(strict_types=1);
 use App\App;
 use App\Config;
 use App\Container;
-use App\Enums\RequestMethod;
-use App\Middlewares\SessionMiddleware;
 use App\Routing\Router;
 
 require_once __DIR__ . '/../vendor/autoload.php';
