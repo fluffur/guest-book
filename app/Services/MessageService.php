@@ -12,7 +12,7 @@ class MessageService
 
     public function findAllMessagesWithAuthors(): array
     {
-        return $this->messageModel->findAllWithUsers();
+        return array_reverse($this->messageModel->findAllWithUsers());
     }
 
     public function createMessage(string $message): int
