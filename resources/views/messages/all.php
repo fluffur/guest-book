@@ -6,12 +6,129 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Home page</title>
+
+    <style>
+
+        /* General */
+        html {
+            box-sizing: border-box;
+
+        }
+
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+
+        body {
+            font-family: Inter, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1em 0;
+            text-align: center;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 600px;
+            background-color: #f4f4f4;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        main h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        main form {
+            margin-top: 20px;
+        }
+
+        main form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        main form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            resize: none;
+        }
+
+        main form input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: white;
+            cursor: pointer;
+        }
+
+        main form input[type="submit"]:hover {
+            background-color: #555;
+        }
+
+        main p {
+            margin-bottom: 10px;
+        }
+
+        main a {
+            color: darkred;
+            text-decoration: none;
+        }
+
+        main a:hover {
+            text-decoration: underline;
+        }
+
+        main hr {
+            margin: 20px 0;
+            border: none;
+            border-top: 1px solid #ccc;
+        }
+
+        .message {
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            padding: 30px;
+        }
+    </style>
+
 </head>
 <body>
 <header>
     <h1>Guest book</h1>
     <nav>
         <ul>
+            <li><a href="/">Home</a></li>
             <li><a href="/login">Login</a></li>
             <li><a href="/register">Register</a></li>
             <li><a href="/messages">Update messages</a></li>
@@ -28,11 +145,11 @@
         <form method="post" action="/messages/new">
             <label for="message">Message: </label>
             <br>
-            <textarea style="resize: none"
+            <textarea
                       name="message"
                       id="message"
                       cols="30"
-                      rows="10"
+                      rows="2"
                       maxlength="120"
                       placeholder="Write your message here"></textarea>
             <input type="submit" value="Enter message">
@@ -46,10 +163,12 @@
     <?php endif; ?>
 
     <?php foreach ($messages as $message): ?>
-        <p>Message from <a href="<?= $message['user_id'] ?>"> <?= $message['username'] ?></a></p>
-        <p><?= $message['message'] ?></p>
-        <p><a id="deleteMessage" href="/messages/delete/<?= $message['id'] ?>">Delete</a></p>
-        <hr>
+        <div class="message">
+            <p>Message from <a href="<?= $message['user_id'] ?>"> <?= $message['username'] ?></a></p>
+            <p><?= $message['message'] ?></p>
+            <p><a id="editMessage">Edit</a></p>
+            <p><a id="deleteMessage">Delete</a></p>
+        </div>
 
     <?php endforeach; ?>
 
@@ -60,7 +179,7 @@
 
     const deleteMessage = document.getElementById("deleteMessage");
     deleteMessage.onclick = async function () {
-        await fetch(deleteMessage.getAttribute("href"), {method: "DELETE"})
+        await fetch("messages/<?= $message['id'] ?>/delete", {method: "DELETE"})
     }
 
 </script>

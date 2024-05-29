@@ -5,7 +5,6 @@ namespace App;
 use App\DTO\Request;
 use App\Exceptions\RouteNotFoundException;
 use App\Routing\Router;
-use PDO;
 
 class App
 {
