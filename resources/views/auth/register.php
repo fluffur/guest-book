@@ -23,13 +23,17 @@
         nav ul {
             list-style: none;
             padding: 0;
+            display: flex;
+            max-width: 800px;
+            flex-wrap: wrap;
+            margin: 0 auto;
+            justify-content: center;
         }
-        nav ul li {
-            display: inline;
-            margin: 0 15px;
-        }
+
         nav ul li a {
+            display: block;
             color: white;
+            padding: 30px;
             text-decoration: none;
         }
         nav ul li a:hover {
@@ -59,9 +63,7 @@
             margin-bottom: 5px;
         }
 
-        main form input[type="text"],
-        main form input[type="password"],
-        main form input[type="submit"] {
+        .register-input {
             width: 100%;
             padding: 10px;
             margin-bottom: 10px;
@@ -89,7 +91,7 @@
         <ul>
             <li><a href="/">Home</a></li>
             <li><a href="/login">Login</a></li>
-            <li>Register</li>
+            <li><a href="/register">Register</a></li>
             <li><a href="/messages">Show messages</a></li>
         </ul>
     </nav>
@@ -102,12 +104,15 @@
         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token) ?>">
 
         <label for="username">Username: </label>
-        <input id="username" name="username" type="text" maxlength="255">
+        <input class="register-input" id="username" name="username" type="text" maxlength="255">
+        <br>
+        <label for="email">Email: </label>
+        <input class="register-input" id="email" name="email" type="email" maxlength="255">
         <br>
         <label for="password">Password: </label>
-        <input type="password" name="password" id="password">
+        <input class="register-input" type="password" name="password" id="password">
         <br>
-        <input type="submit" value="Register">
+        <input class="register-input" type="submit" value="Register">
     </form>
 
 

@@ -102,7 +102,7 @@ class Router
         }
     }
 
-    public function registerMiddlewaresFromControllersInNamespace(string $namespace)
+    public function registerMiddlewaresFromControllersInNamespace(string $namespace): void
     {
         $this->registerMiddlewaresFromControllerAttributes(
             $this->container->get(ControllerResolver::class)->getControllersFromNamespace($namespace)

@@ -23,13 +23,17 @@
         nav ul {
             list-style: none;
             padding: 0;
+            display: flex;
+            max-width: 800px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            justify-content: center;
         }
-        nav ul li {
-            display: inline;
-            margin: 0 15px;
-        }
+
         nav ul li a {
+            display: block;
             color: white;
+            padding: 30px;
             text-decoration: none;
         }
         nav ul li a:hover {
@@ -88,7 +92,7 @@
     <nav>
         <ul>
             <li><a href="/">Home</a></li>
-            <li>Login</li>
+            <li><a href="/login">Login</a></li>
             <li><a href="/register">Register</a></li>
             <li><a href="/messages">Show messages</a></li>
         </ul>

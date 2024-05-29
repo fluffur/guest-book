@@ -20,17 +20,11 @@ class User extends Model
         return $stmt->fetch();
     }
 
-    public function findById(int $id): array
-    {
-        $stmt = $this->db->prepare('SELECT * FROM users WHERE id = :id');
-        $stmt->execute(['id' => $id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
 
-    public function create(string $username, string $password): int
+    public function create(string $username, string $password, $email): int
     {
-        $stmt = $this->db->prepare('INSERT INTO users (username, password) VALUES (:username, :password)');
-        $stmt->execute(['username' => $username, 'password' => $password]);
+        $stmt = $this->db->prepare('INSERT INTO users (username, password, email) VALUES (:username, :password, :email)');
+        $stmt->execute(['username' => $username, 'password' => $password, 'email' => $email]);
         return $this->db->lastInsertId();
     }
 

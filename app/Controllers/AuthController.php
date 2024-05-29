@@ -24,7 +24,7 @@ class AuthController
 
     #[Get('/login')]
     #[Middleware(SessionMiddleware::class)]
-    public function showLogin(Request $request): View
+    public function showLogin(): View
     {
         $csrfToken = $this->csrfService->generateToken();
         return View::make('auth/login', ['csrf_token' => $csrfToken]);
@@ -32,7 +32,7 @@ class AuthController
 
     #[Get('/register')]
     #[Middleware(SessionMiddleware::class)]
-    public function showRegister(Request $request): View
+    public function showRegister(): View
     {
         $csrfToken = $this->csrfService->generateToken();
         return View::make('auth/register', ['csrf_token' => $csrfToken]);
@@ -55,7 +55,7 @@ class AuthController
     #[Middleware(CsrfMiddleware::class)]
     public function doRegister(Request $request): void
     {
-        $this->authService->processRegister($request->username, $request->password);
+        $this->authService->processRegister($request->username, $request->password, $request->email);
 
         header('Location: /');
 
@@ -63,7 +63,7 @@ class AuthController
 
     #[Get('/logout')]
     #[Middleware(SessionMiddleware::class)]
-    public function logout(Request $request): void
+    public function logout(): void
     {
         session_destroy();
 

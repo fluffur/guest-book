@@ -23,17 +23,39 @@
             list-style: none;
             padding: 0;
         }
-        nav ul li {
-            display: inline;
-            margin: 0 15px;
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            justify-content: center;
         }
         nav ul li a {
+            display: block;
             color: white;
+            padding: 30px;
             text-decoration: none;
         }
         nav ul li a:hover {
             text-decoration: underline;
         }
+        main {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 600px;
+            background-color: #f4f4f4;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        main h2 {
+            text-align: center;
+            color: #333;
+        }
+
     </style>
 
     <title>Home page</title>
@@ -44,12 +66,15 @@
     <h1>Guest book</h1>
     <nav>
         <ul>
-            <li>Home</li>
+            <li><a href="/">Home</a></li>
             <li><a href="/login">Login</a></li>
             <li><a href="/register">Register</a></li>
             <li><a href="/messages">Show messages</a></li>
         </ul>
     </nav>
 </header>
+<main>
+    <h2>Home page</h2>
+</main>
 </body>
 </html>

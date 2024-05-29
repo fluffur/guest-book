@@ -18,7 +18,6 @@ class MessagesController
     public function __construct(protected MessageService $messageService)
     {
     }
-
     #[Get('/messages')]
     #[Middleware(SessionMiddleware::class)]
     public function index(Request $request): View|string
@@ -36,9 +35,14 @@ class MessagesController
     #[Middleware(SessionMiddleware::class)]
     public function create(Request $request): void
     {
-        $messageId = $this->messageService->createMessage($request->body['message']);
+        $this->messageService->createMessage($request->body['message']);
 
         header('Location: /messages');
+    }
+
+    #[Delete('/messages/{id}')]
+    public function delete(Request $request, int $id): void
+    {
 
     }
 

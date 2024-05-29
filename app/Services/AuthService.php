@@ -30,7 +30,7 @@ class AuthService
         $_SESSION['user'] = $user;
     }
 
-    public function processRegister(string $username, string $password): void
+    public function processRegister(string $username, string $password, string $email): void
     {
         $this->validateCredentials($username, $password);
 
@@ -40,7 +40,7 @@ class AuthService
             throw new RuntimeException('Username already taken');
         }
 
-        $id = $this->userModel->create($username, password_hash($password, PASSWORD_DEFAULT));
+        $id = $this->userModel->create($username, password_hash($password, PASSWORD_DEFAULT), $email);
 
         $_SESSION['user'] = ['id' => $id, 'username' => $username];
 

@@ -28,19 +28,24 @@
         header {
             background-color: #333;
             color: white;
+            top: 0;
             padding: 1em 0;
             text-align: center;
         }
         nav ul {
             list-style: none;
             padding: 0;
+            display: flex;
+            max-width: 800px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            justify-content: center;
         }
-        nav ul li {
-            display: inline;
-            margin: 0 15px;
-        }
+
         nav ul li a {
+            display: block;
             color: white;
+            padding: 30px;
             text-decoration: none;
         }
         nav ul li a:hover {
@@ -50,6 +55,7 @@
         main {
             margin: 20px auto;
             padding: 20px;
+
             max-width: 600px;
             background-color: #f4f4f4;
             border-radius: 5px;
@@ -99,12 +105,12 @@
             margin-bottom: 10px;
         }
 
-        main a {
+        a {
             color: darkred;
             text-decoration: none;
         }
 
-        main a:hover {
+        a:hover {
             text-decoration: underline;
         }
 
@@ -112,6 +118,11 @@
             margin: 20px 0;
             border: none;
             border-top: 1px solid #ccc;
+        }
+
+        .messages {
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         .message {
@@ -162,24 +173,29 @@
 
     <?php endif; ?>
 
-    <?php foreach ($messages as $message): ?>
-        <div class="message">
-            <p>Message from <a href="<?= $message['user_id'] ?>"> <?= $message['username'] ?></a></p>
-            <p><?= $message['message'] ?></p>
-            <p><a id="editMessage">Edit</a></p>
-            <p><a id="deleteMessage">Delete</a></p>
-        </div>
-
-    <?php endforeach; ?>
 
 
 </main>
+
+<section class="messages">
+    <?php foreach ($messages as $message): ?>
+        <div class="message">
+            <p>Message from <a href="/users/<?= $message['user_id'] ?>"> <?= $message['username'] ?></a></p>
+            <p><?= $message['message'] ?></p>
+            <?php if ($message['user_id'] === $user['id']): ?>
+                <p><a id="editMessage">Edit</a></p>
+                <p><a id="deleteMessage">Delete</a></p>
+            <?php endif; ?>
+        </div>
+    <?php endforeach; ?>
+
+</section>
 
 <script>
 
     const deleteMessage = document.getElementById("deleteMessage");
     deleteMessage.onclick = async function () {
-        await fetch("messages/<?= $message['id'] ?>/delete", {method: "DELETE"})
+        await fetch("messages/<?= $message['id'] ?>", {method: "DELETE"})
     }
 
 </script>

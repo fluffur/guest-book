@@ -8,8 +8,6 @@ use App\Routing\Router;
 
 class App
 {
-
-
     public function __construct(
         protected Container $container,
         protected Router    $router,
