@@ -28,7 +28,6 @@
         header {
             background-color: #333;
             color: white;
-            top: 0;
             padding: 1em 0;
             text-align: center;
         }
@@ -121,7 +120,7 @@
         }
 
         .messages {
-            max-width: 800px;
+            max-width: 600px;
             margin: 0 auto;
         }
 
@@ -182,7 +181,7 @@
         <div class="message">
             <p>Message from <a href="/users/<?= $message['user_id'] ?>"> <?= $message['username'] ?></a></p>
             <p><?= $message['message'] ?></p>
-            <?php if ($message['user_id'] === $user['id']): ?>
+            <?php if ($message['user_id'] === ($user['id'] ?? null)): ?>
                 <p><a id="editMessage">Edit</a></p>
                 <p><a id="deleteMessage">Delete</a></p>
             <?php endif; ?>
