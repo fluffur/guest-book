@@ -2,6 +2,8 @@
 
 This project is a simple web guest book in PHP.
 
+![Messages page example](Messages.png)
+
 ## Project Structure
 
 The project includes the following main components:
