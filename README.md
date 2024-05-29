@@ -1,6 +1,6 @@
 # Guest Book Project
 
-This project is a simple web guest book in PHP.
+This project is a guest book written in PHP.
 
 ![Messages page example](Messages.png)
 
