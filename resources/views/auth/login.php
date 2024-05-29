@@ -23,6 +23,7 @@
 
     <h2>Log in</h2>
     <form method="post" action="/login">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token) ?>">
         <label for="username">Username: </label>
         <input id="username" name="username" type="text" maxlength="255">
         <br>

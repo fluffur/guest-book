@@ -14,4 +14,9 @@ class Request
     )
     {
     }
+
+    public function __get(string $name)
+    {
+        return $this->body[$name] ?? null;
+    }
 }

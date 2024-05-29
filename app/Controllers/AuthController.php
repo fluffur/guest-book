@@ -7,39 +7,44 @@ use App\Attributes\Get;
 use App\Attributes\Middleware;
 use App\Attributes\Post;
 use App\DTO\Request;
+use App\Middlewares\CsrfMiddleware;
 use App\Middlewares\SessionMiddleware;
 use App\Services\AuthService;
+use App\Services\CsrfService;
 use App\View;
 
 #[Controller]
 class AuthController
 {
 
-    public function __construct(protected AuthService $authService)
+    public function __construct(protected AuthService $authService,
+                                protected CsrfService $csrfService)
     {
     }
 
     #[Get('/login')]
-    public function login(Request $request): View
+    #[Middleware(SessionMiddleware::class)]
+    public function showLogin(Request $request): View
     {
-        return View::make('auth/login');
+        $csrfToken = $this->csrfService->generateToken();
+        return View::make('auth/login', ['csrf_token' => $csrfToken]);
     }
 
     #[Get('/register')]
-    public function register(Request $request): View
+    #[Middleware(SessionMiddleware::class)]
+    public function showRegister(Request $request): View
     {
-        return View::make('auth/register');
+        $csrfToken = $this->csrfService->generateToken();
+        return View::make('auth/register', ['csrf_token' => $csrfToken]);
     }
 
 
     #[Post('/login')]
     #[Middleware(SessionMiddleware::class)]
-    public function processLogin(Request $request): void
+    #[Middleware(CsrfMiddleware::class)]
+    public function doLogin(Request $request): void
     {
-        $username = $request->body['username'] ?? null;
-        $password = $request->body['password'] ?? null;
-
-        $this->authService->processLogin($username, $password);
+        $this->authService->processLogin($request->username, $request->password);
 
         header('Location: /');
 
@@ -47,12 +52,10 @@ class AuthController
 
     #[Post('/register')]
     #[Middleware(SessionMiddleware::class)]
-    public function processRegister(Request $request): void
+    #[Middleware(CsrfMiddleware::class)]
+    public function doRegister(Request $request): void
     {
-        $username = $request->body['username'] ?? null;
-        $password = $request->body['password'] ?? null;
-
-        $this->authService->processRegister($username, $password);
+        $this->authService->processRegister($request->username, $request->password);
 
         header('Location: /');
 
