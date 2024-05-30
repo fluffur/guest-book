@@ -13,7 +13,7 @@ class Message extends Model
 
     public function findAllWithUsers(): array
     {
-        $stmt = $this->db->query('SELECT * FROM user_messages JOIN users ON user_messages.user_id = users.id');
+        $stmt = $this->db->query('SELECT users.id user_id, user_messages.id message_id, username, message FROM user_messages JOIN users ON user_messages.user_id = users.id');
         return $stmt->fetchAll();
     }
 
@@ -29,5 +29,12 @@ class Message extends Model
         $stmt = $this->db->prepare('SELECT * FROM user_messages WHERE id = :message_id');
         $stmt->execute(['message_id' => $messageId]);
         return $stmt->fetch();
+    }
+
+    public function delete(int $id): bool
+    {
+        $stmt = $this->db->prepare('DELETE FROM user_messages WHERE id = :message_id');
+        return $stmt->execute([':message_id' => $id]);
+
     }
 }

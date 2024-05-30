@@ -51,6 +51,10 @@ class Router
 
     public function register(Request $request, callable|array $action): self
     {
+
+
+
+
         $this->routes[$request->method->value][$request->uri] = $action;
 
         return $this;
@@ -111,6 +115,16 @@ class Router
 
     public function resolve(Request $request)
     {
+        $method = match ($request->_method) {
+            'put', 'delete' => strtoupper($request->_method),
+            default => false
+        };
+        if ($method) {
+
+            $request = new Request( RequestMethod::from($method), $request->uri, $request->body, $request->queryString);
+            $this->register($request, $this->routes[$request->method->value][$request->uri]);
+        }
+
         $uriSplit = explode('?', $request->uri);
         $route = $uriSplit[0];
 

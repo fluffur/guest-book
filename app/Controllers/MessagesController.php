@@ -35,14 +35,17 @@ class MessagesController
     #[Middleware(SessionMiddleware::class)]
     public function create(Request $request): void
     {
-        $this->messageService->createMessage($request->body['message']);
+        $this->messageService->create($request->body['message']);
 
         header('Location: /messages');
     }
 
-    #[Delete('/messages/{id}')]
-    public function delete(Request $request, int $id): void
+    #[Delete('/messages/delete')]
+    public function delete(Request $request): void
     {
+
+        $r = $this->messageService->delete($request->body['message_id']);
+        header('Location: /messages');
 
     }
 

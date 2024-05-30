@@ -182,22 +182,21 @@
             <p>Message from <a href="/users/<?= $message['user_id'] ?>"> <?= $message['username'] ?></a></p>
             <p><?= $message['message'] ?></p>
             <?php if ($message['user_id'] === ($user['id'] ?? null)): ?>
-                <p><a id="editMessage">Edit</a></p>
-                <p><a id="deleteMessage">Delete</a></p>
+                <form action="/messages/edit" method="post">
+                    <input type="hidden" name="_method" value="put">
+                    <p><input type="submit" id="editMessage" value="Edit"></p>
+                </form>
+                <form action="/messages/delete" method="post">
+                    <input type="hidden" name="_method" value="delete">
+                    <input type="hidden" name="message_id" value="<?= $message['message_id'] ?>">
+                    <p><input type="submit" value="Delete" id="deleteMessage"></p>
+                </form>
             <?php endif; ?>
         </div>
     <?php endforeach; ?>
 
 </section>
 
-<script>
-
-    const deleteMessage = document.getElementById("deleteMessage");
-    deleteMessage.onclick = async function () {
-        await fetch("messages/<?= $message['id'] ?>", {method: "DELETE"})
-    }
-
-</script>
 
 </body>
 </html>

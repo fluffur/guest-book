@@ -102,7 +102,6 @@
 
     <form method="post" action="/register">
         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token) ?>">
-
         <label for="username">Username: </label>
         <input class="register-input" id="username" name="username" type="text" maxlength="255">
         <br>
