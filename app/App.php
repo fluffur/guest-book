@@ -3,6 +3,8 @@
 namespace App;
 
 use App\DTO\Request;
+use App\Exceptions\Auth\InvalidCredentialsException;
+use App\Exceptions\Auth\UsernameTakenException;
 use App\Exceptions\RouteNotFoundException;
 use App\Routing\Router;
 
@@ -30,6 +32,10 @@ class App
             http_response_code(404);
 
             echo View::make('error/404');
+        } catch (InvalidCredentialsException) {
+            echo View::make('error/invalid_credentials',  ['csrf_token' => $_SESSION['csrf_token']]);
+        } catch (UsernameTakenException) {
+            echo View::make('error/username_taken', ['csrf_token' => $_SESSION['csrf_token']]);
         }
     }
 }
