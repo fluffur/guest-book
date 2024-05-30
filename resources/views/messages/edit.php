@@ -141,7 +141,7 @@
             <li><a href="/">Home</a></li>
             <li><a href="/login">Login</a></li>
             <li><a href="/register">Register</a></li>
-            <li><a href="/messages">Update messages</a></li>
+            <li><a href="/messages">Messages</a></li>
         </ul>
     </nav>
 </header>
