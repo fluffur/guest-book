@@ -27,4 +27,14 @@ class MessageService
         return $this->messageModel->delete($id);
     }
 
+    public function findById(int $id)
+    {
+        return $this->messageModel->findById($id);
+    }
+
+    public function edit(int $id, string $newMessage)
+    {
+        $this->messageModel->edit($id, $newMessage);
+    }
+
 }

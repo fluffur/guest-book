@@ -26,7 +26,7 @@ class Message extends Model
 
     public function findById(int $messageId): array
     {
-        $stmt = $this->db->prepare('SELECT * FROM user_messages WHERE id = :message_id');
+        $stmt = $this->db->prepare('SELECT id message_id, message, user_id FROM user_messages WHERE id = :message_id');
         $stmt->execute(['message_id' => $messageId]);
         return $stmt->fetch();
     }
@@ -35,6 +35,13 @@ class Message extends Model
     {
         $stmt = $this->db->prepare('DELETE FROM user_messages WHERE id = :message_id');
         return $stmt->execute([':message_id' => $id]);
+
+    }
+
+    public function edit(int $id, string $newMessage): bool
+    {
+        $stmt = $this->db->prepare('UPDATE user_messages SET message = :message WHERE id = :message_id');
+        return $stmt->execute([':message' => $newMessage, ':message_id' => $id]);
 
     }
 }

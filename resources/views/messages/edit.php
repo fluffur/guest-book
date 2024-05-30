@@ -147,27 +147,26 @@
 </header>
 <main>
 
-    <?php if (isset($user['id'])): ?>
+    <?php if (isset($user['id']) && $user['id'] === $message['user_id']): ?>
 
-        <p>Welcome, <?= $user['username'] ?></p>
-        <p><a href="/logout">Logout</a></p>
-
-        <form method="post" action="/messages/new">
-            <label for="message">Message: </label>
+        <form method="post" action="/messages/edit">
+            <input type="hidden" name="_method" value="put">
+            <input type="hidden" name="id" value="<?= $message['message_id'] ?>">
+            <label for="message">Edit Message: </label>
             <br>
             <textarea
-                      name="message"
-                      id="message"
-                      cols="30"
-                      rows="2"
-                      maxlength="120"
-                      placeholder="Write your message here"></textarea>
+                name="message"
+                id="message"
+                cols="30"
+                rows="2"
+                maxlength="120"
+                placeholder="Write your message here"><?= $message['message'] ?></textarea>
             <input type="submit" value="Enter message">
         </form>
 
     <?php else: ?>
 
-        <p>To send a message you must be <a href="/login">logged in</a>.</p>
+        <p>To edit a message you must be <a href="/login">logged in</a>.</p>
 
 
     <?php endif; ?>
@@ -175,27 +174,6 @@
 
 
 </main>
-
-<section class="messages">
-    <?php foreach ($messages as $message): ?>
-        <div class="message">
-            <p>Message from <a href="/users/<?= $message['user_id'] ?>"> <?= $message['username'] ?></a></p>
-            <p><?= $message['message'] ?></p>
-            <?php if ($message['user_id'] === ($user['id'] ?? null)): ?>
-
-
-                <p><a href="/messages/edit?id=<?= $message['message_id'] ?>" id="editMessage">Edit</a></p>
-                <form action="/messages/delete" method="post">
-                    <input type="hidden" name="_method" value="delete">
-                    <input type="hidden" name="message_id" value="<?= $message['message_id'] ?>">
-                    <p><input type="submit" value="Delete" id="deleteMessage"></p>
-                </form>
-            <?php endif; ?>
-        </div>
-    <?php endforeach; ?>
-
-</section>
-
 
 </body>
 </html>
