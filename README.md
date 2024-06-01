@@ -9,7 +9,7 @@ This project is a guest book written in PHP.
 The project includes the following main components:
 
 - **Nginx**: Web server for handling requests and serving static files.
-- **MySQL**: Database management system for data storage.
+- **PostgresSQL**: Database management system for data storage.
 - **PHP**: Programming language for server-side logic.
 
 ## Getting Started
